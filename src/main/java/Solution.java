@@ -748,4 +748,90 @@ public class Solution {
             return null;
         }
     }
+
+    /**
+     * 17. 电话号码的字母组合
+     * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+     *
+     * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+     *
+     *
+     *
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：digits = "23"
+     * 输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]
+     * 示例 2：
+     *
+     * 输入：digits = ""
+     * 输出：[]
+     * 示例 3：
+     *
+     * 输入：digits = "2"
+     * 输出：["a","b","c"]
+     *
+     *
+     * 提示：
+     *
+     * 0 <= digits.length <= 4
+     * digits[i] 是范围 ['2', '9'] 的一个数字。
+     * @param digits
+     * @return
+     */
+    public List<String> letterCombinations(String digits) {
+        List<String> result = new ArrayList<String>();
+        Map<String, String> digitsMap = new HashMap<String, String>();
+        digitsMap.put("2", "abc");
+        digitsMap.put("3", "def");
+        digitsMap.put("4", "ghi");
+        digitsMap.put("5", "jkl");
+        digitsMap.put("6", "mno");
+        digitsMap.put("7", "pqrs");
+        digitsMap.put("8", "tuv");
+        digitsMap.put("9", "wxyz");
+        if(digits.length() == 0){
+            return result;
+        }else if(digits.length() == 1){
+            String digitValue = digitsMap.get(digits);
+            for(int i=0; i<digitValue.length(); i++){
+                result.add(digitValue.substring(i, i+1));
+            }
+            return result;
+        }else{
+            List<String> digitList = new ArrayList<String>();
+            for(int i=0; i<digits.length(); i++){
+                digitList.add(digitsMap.get(digits.substring(i, i+1)));
+            }
+            result = getSubDigitList(digitList);
+        }
+        return result;
+    }
+
+    /**
+     * 递归返回当前字符串和子字符串的组合list
+     * @param digitList
+     * @return
+     */
+    private List<String> getSubDigitList(List<String> digitList){
+        List<String> result = new ArrayList<String>();
+        if(digitList.size() == 1) {
+            String digitValue = digitList.get(0);
+            for (int i = 0; i < digitValue.length(); i++) {
+                result.add(digitValue.substring(i, i + 1));
+            }
+            return result;
+        }else{
+            String digitValue = digitList.get(0);
+            for (int i = 0; i < digitValue.length(); i++) {
+                String digitCharString =  digitValue.substring(i, i + 1);
+                List<String> subResult = getSubDigitList(digitList.subList(1, digitList.size()));
+                for(String subResultElment : subResult){
+                    result.add(digitCharString+subResultElment);
+                }
+            }
+            return result;
+        }
+    }
 }

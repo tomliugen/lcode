@@ -300,4 +300,17 @@ public class SolutionTest {
         Assert.assertEquals(solution.threeSum(nums6).size(), 6);
         Assert.assertEquals(solution.threeSum(nums7).size(), 1);
     }
+
+    @Test
+    public void letterCombinationsTest(){
+        Solution solution = new Solution();
+        String digits1 = "23";
+        String digits2 = "";
+        String digits3 = "2";
+        String digits4 = "22";
+        Assert.assertEquals(solution.letterCombinations(digits1).size(), 9);
+        Assert.assertEquals(solution.letterCombinations(digits2).size(), 0);
+        Assert.assertEquals(solution.letterCombinations(digits3).size(), 3);
+        Assert.assertEquals(solution.letterCombinations(digits4).size(), 9);
+    }
 }
