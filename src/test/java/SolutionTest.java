@@ -266,4 +266,17 @@ public class SolutionTest {
         Assert.assertEquals(solution.maxArea(height4), 2);
         Assert.assertEquals(solution.maxArea(height5), 0);
     }
+
+    @Test
+    public void maxProfitTest(){
+        Solution solution = new Solution();
+        int[] prices1 = new int[]{7,1,5,4,3,6};
+        int[] prices2 = new int[]{7,6,4,3,1};
+        int[] prices3 = new int[]{1,4,2,6};
+
+        Assert.assertEquals(solution.maxProfit(prices1), 5);
+        Assert.assertEquals(solution.maxProfit(prices2), 0);
+        Assert.assertEquals(solution.maxProfit(prices3), 5);
+
+    }
 }
