@@ -567,5 +567,185 @@ public class Solution {
         }
         return profit;
     }
-    
+
+    /**
+     * 15. 三数之和
+     * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
+     *
+     * 注意：答案中不可以包含重复的三元组。
+     *
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：nums = [-1,0,1,2,-1,-4]
+     * 输出：[[-1,-1,2],[-1,0,1]]
+     * 示例 2：
+     *
+     * 输入：nums = []
+     * 输出：[]
+     * 示例 3：
+     *
+     * 输入：nums = [0]
+     * 输出：[]
+     *
+     *
+     * 提示：
+     *
+     * 0 <= nums.length <= 3000
+     * -105 <= nums[i] <= 105
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        Map<String, Integer> existKeys = new HashMap<String, Integer>();
+        if(nums.length < 3){
+            return result;
+        }
+        // 首先把数组分成两个数组，一个数组的值全部大于等于0，另外一个数组的值全部小于0，并且每个数字在数组内最多出现2次，0可以3次
+        int[] positiveNums = new int[nums.length];
+        int positiveCount = 0;
+        int[] negativeNums = new int[nums.length];
+        int negativeCount = 0;
+        Map<Integer, Integer> numCountMap = new HashMap<Integer, Integer>();
+        for(int i=0; i<nums.length; i++){
+            if(nums[i] >= 0){
+                if(numCountMap.containsKey(nums[i])){
+                    if(nums[i] == 0 && numCountMap.get(nums[i]) < 2){
+                        positiveNums[positiveCount++] = nums[i];
+                        numCountMap.put(nums[i], numCountMap.get(nums[i])+1);
+                    }else if(numCountMap.get(nums[i]) < 3){
+                        positiveNums[positiveCount++] = nums[i];
+                        numCountMap.put(nums[i], numCountMap.get(nums[i])+1);
+                    }
+                }else{
+                    positiveNums[positiveCount++] = nums[i];
+                    numCountMap.put(nums[i], 1);
+                }
+
+            }else{
+                if(numCountMap.containsKey(nums[i])){
+                    if(numCountMap.get(nums[i]) < 2){
+                        negativeNums[negativeCount++] = nums[i];
+                        numCountMap.put(nums[i], numCountMap.get(nums[i])+1);
+                    }
+                }else{
+                    negativeNums[negativeCount++] = nums[i];
+                    numCountMap.put(nums[i], 1);
+                }
+            }
+        }
+
+        // 如果负数数组长度为0，只需要坚持正数里面是否有超过3个0就可以了
+        if(negativeCount == 0){
+            List<Integer> zeroNumGroup = findZeroGroup(positiveNums, positiveCount);
+            if(zeroNumGroup != null){
+                result.add(zeroNumGroup);
+            }
+            return result;
+        }
+        // 下面分三种场景遍历
+        // 第一种是正数数组出2个数字，负数数组出1个数字
+        // 第二种情况是负数数组出2个数字，正数数组出1个数字
+        // 第三种情况是正数数组包含3个0
+
+        // 第一种是正数数组出2个数字，负数数组出1个数字
+        for(int i=0; i<positiveCount; i++){
+            if(positiveNums[i] != 0){
+                Map<Integer, Integer> negativeResult = findNumGroup(negativeNums, negativeCount, -positiveNums[i]);
+                for(Map.Entry<Integer, Integer> entry : negativeResult.entrySet()){
+                    String existKey = String.valueOf(positiveNums[i])+"-"+String.valueOf(entry.getValue())+"-"+String.valueOf(entry.getKey());
+                    if(!existKeys.containsKey(existKey)){
+                        List<Integer> numGroup = new ArrayList<Integer>(3);
+                        numGroup.add(positiveNums[i]);
+                        numGroup.add(entry.getKey());
+                        numGroup.add(entry.getValue());
+                        result.add(numGroup);
+                        existKeys.put(existKey, 0);
+                    }
+                }
+
+            }
+        }
+
+        // 第一种是负数数组出2个数字，正数数组出1个数字
+        for(int i=0; i<negativeCount; i++){
+            if(negativeNums[i] != 0){
+                Map<Integer, Integer> positiveResult = findNumGroup(positiveNums, positiveCount, -negativeNums[i]);
+                for(Map.Entry<Integer, Integer> entry : positiveResult.entrySet()){
+                    String existKey = String.valueOf(entry.getValue())+"-"+String.valueOf(entry.getKey())+"-"+String.valueOf(negativeNums[i]);
+                    if(!existKeys.containsKey(existKey)){
+                        List<Integer> numGroup = new ArrayList<Integer>(3);
+                        numGroup.add(entry.getValue());
+                        numGroup.add(entry.getKey());
+                        numGroup.add(negativeNums[i]);
+                        result.add(numGroup);
+                        existKeys.put(existKey, 0);
+                    }
+                }
+
+            }
+        }
+
+        // 第三种情况，正数数组包含3个0
+        List<Integer> zeroNumGroup = findZeroGroup(positiveNums, positiveCount);
+        if(zeroNumGroup != null){
+            result.add(zeroNumGroup);
+        }
+        return result;
+    }
+
+    /**
+     * 在给定的数组内，查询前numCount个数字，寻找任意两个数字和为sumValue的数字组合，返回所有数字组合，
+     * 且值小的数字做key，值大的数字做value
+     * @param nums
+     * @param numCount
+     * @param sumValue
+     * @return
+     */
+    private Map<Integer, Integer> findNumGroup(int nums[], int numCount, int sumValue){
+        Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+        for(int i=0; i<numCount; i++){
+            int leftValue = sumValue - nums[i];
+            for(int j=i+1; j<numCount; j++){
+                if(leftValue == nums[j]){
+                    if(nums[i] > nums[j]){
+                        result.put(nums[j], nums[i]);
+                    }else{
+                        result.put(nums[i], nums[j]);
+                    }
+                    break; // 跳出内层的循环
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 检查数组里面是否包含3个0，如果是，则返回包含3个0的list, 否则返回null
+     * @param nums
+     * @param count
+     * @return
+     */
+    private List<Integer> findZeroGroup(int nums[], int count){
+        int zeroCount = 0;
+        for(int i=0; i<count; i++){
+            if(nums[i] == 0){
+                zeroCount++;
+            }
+            if(zeroCount == 3){
+                break;
+            }
+        }
+        if(zeroCount == 3){
+            List<Integer> numGroup = new ArrayList<Integer>(3);
+            numGroup.add(0);
+            numGroup.add(0);
+            numGroup.add(0);
+            return numGroup;
+        }else{
+            return null;
+        }
+    }
 }

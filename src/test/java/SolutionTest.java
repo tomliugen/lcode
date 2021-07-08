@@ -3,6 +3,7 @@ import org.testng.*;
 import org.testng.annotations.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by 14060614 on 2021/3/23.
@@ -278,5 +279,25 @@ public class SolutionTest {
         Assert.assertEquals(solution.maxProfit(prices2), 0);
         Assert.assertEquals(solution.maxProfit(prices3), 5);
 
+    }
+
+    @Test
+    public void threeSumTest(){
+        Solution solution = new Solution();
+        int[] nums1 = new int[]{-1,0,1,2,-1,-4};
+        int[] nums2 = new int[]{};
+        int[] nums3 = new int[]{0};
+        int[] nums4 = new int[]{0, 0, 0};
+        int[] nums5 = new int[]{0, 0, 0, -1, 0, 2};
+        int[] nums6 = new int[]{-4,-2,-2,-2,0,1,2,2,2,3,3,4,4,6,6};
+        int[] nums7 = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2};
+        List<List<Integer>> result1 = solution.threeSum(nums1);
+        Assert.assertEquals(solution.threeSum(nums1).size(), 2);
+        Assert.assertEquals(solution.threeSum(nums2).size(), 0);
+        Assert.assertEquals(solution.threeSum(nums3).size(), 0);
+        Assert.assertEquals(solution.threeSum(nums4).size(), 1);
+        Assert.assertEquals(solution.threeSum(nums5).size(), 1);
+        Assert.assertEquals(solution.threeSum(nums6).size(), 6);
+        Assert.assertEquals(solution.threeSum(nums7).size(), 1);
     }
 }
