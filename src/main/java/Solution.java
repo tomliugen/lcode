@@ -834,4 +834,79 @@ public class Solution {
             return result;
         }
     }
+
+    /**
+     * 19. 删除链表的倒数第 N 个结点
+     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+     *
+     * 进阶：你能尝试使用一趟扫描实现吗？
+     *
+     *
+     *
+     * 示例 1：
+     *
+     *
+     * 输入：head = [1,2,3,4,5], n = 2
+     * 输出：[1,2,3,5]
+     * 示例 2：
+     *
+     * 输入：head = [1], n = 1
+     * 输出：[]
+     * 示例 3：
+     *
+     * 输入：head = [1,2], n = 1
+     * 输出：[1]
+     *
+     *
+     * 提示：
+     *
+     * 链表中结点的数目为 sz
+     * 1 <= sz <= 30
+     * 0 <= Node.val <= 100
+     * 1 <= n <= sz
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode lastN1 = head;
+        ListNode last = head;
+        // 空链表
+        if(head == null){
+            return head;
+        }
+        // 只有一个元素时
+        if(head.next == null){
+            if(n == 1){
+                head = head.next;
+                return head;
+            }else{
+                return head;
+            }
+        }
+
+        // 用一次遍历，找到倒数第N个结点，需要首先定位到正序的第N个结点（last指向它），
+        // 此时保持lastN1游标和last游标同步向后遍历，当last遍历到最后一个结点时，lastN1就指向目标结点的前一个结点，
+        // 把lastN指向结点的一个结点摘除即可。
+        int i = 0;
+        for(; i<n && last.next != null; i++){
+            last = last.next;
+        }
+
+        if(i == n-1){ // i=n-1时说明需要删除的是第一个结点
+            head = head.next;
+            return head;
+        }
+        if(i < n-1){ // n超过链表长度
+            return head;
+        }
+        // last和lastN1同步向后遍历
+        while(last.next != null){
+            last = last.next;
+            lastN1 = lastN1.next;
+        }
+        // 正常摘除lastN指向的下一个结点即可
+        lastN1.next = lastN1.next.next;
+        return head;
+    }
 }

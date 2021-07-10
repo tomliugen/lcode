@@ -313,4 +313,58 @@ public class SolutionTest {
         Assert.assertEquals(solution.letterCombinations(digits3).size(), 3);
         Assert.assertEquals(solution.letterCombinations(digits4).size(), 9);
     }
+
+    @Test
+    public void removeNthFromEnd(){
+        Solution solution = new Solution();
+        int[] nums1 = new int[]{1,2,3,4,5,6};
+        int[] nums2 = new int[]{1};
+        int[] nums3 = new int[]{1,2,3};
+        int[] nums4 = new int[]{1,2};
+        ListNode head = genList(nums1);
+        ListNode result = solution.removeNthFromEnd(head, 2);
+        Assert.assertEquals(getListNodeValue(result, 5), 6);
+
+        head = genList(nums2);
+        result = solution.removeNthFromEnd(head, 1);
+        Assert.assertEquals(result,  null);
+
+        head = genList(nums3);
+        result = solution.removeNthFromEnd(head, 3);
+        Assert.assertEquals(getListNodeValue(result, 1),  2);
+        Assert.assertEquals(getListNodeValue(result, 2),  3);
+
+        head = genList(nums4);
+        result = solution.removeNthFromEnd(head, 1);
+        Assert.assertEquals(getListNodeValue(result, 1),  1);
+
+    }
+
+    /**
+     * 构造list
+     * @param nums
+     * @return
+     */
+    private ListNode genList(int[] nums){
+        ListNode head = new ListNode(nums[0]);
+        ListNode posNode = head;
+        for(int i=1; i<nums.length; i++){
+            posNode.next = new ListNode(nums[i]);
+            posNode = posNode.next;
+        }
+        return head;
+    }
+
+    /**
+     * 返回指定列表的第n个结点的值
+     * @param head
+     * @param n
+     * @return
+     */
+    private int getListNodeValue(ListNode head, int n){
+        for(int i=0; i<n-1; i++){
+            head = head.next;
+        }
+        return head.val;
+    }
 }
