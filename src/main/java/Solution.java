@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class Solution {
     /**
-     * 两数之和
+     * 1. 两数之和
      * 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 的那 两个 整数，并返回它们的数组下标。
      你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
      你可以按任意顺序返回答案。
@@ -226,7 +226,9 @@ public class Solution {
         return length;
     }
 
-    /**将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行 Z 字形排列。
+    /**
+     * 6. Z 字形变换
+     * 将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行 Z 字形排列。
 
      比如输入字符串为 "PAYPALISHIRING" 行数为 3 时，排列如下：
 
@@ -289,7 +291,8 @@ public class Solution {
         return result.toString();
     }
 
-    /** 整数翻转
+    /**
+     * 7. 整数翻转
      * 给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。
      * 示例 1：
 
@@ -329,6 +332,7 @@ public class Solution {
     }
 
     /**
+     * 8. 字符串转换整数 (atoi)
      * 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
 
      函数 myAtoi(string s) 的算法如下：
@@ -440,7 +444,7 @@ public class Solution {
                 break;
             }
         }
-       // 找到正负符号，且正负符号只能出现一次
+        // 找到正负符号，且正负符号只能出现一次
         if(s.charAt(start) == '-' || s.charAt(start) == '+'){
             nagative = s.charAt(start) == '-';
             start = start+1;
